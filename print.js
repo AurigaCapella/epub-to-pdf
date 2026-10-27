@@ -15,7 +15,7 @@ async function receive(event){
   await Promise.all([...document.images].map(img=>img.decode().catch(()=>{})));
   await document.fonts.ready;
   button.disabled=false;
-  status.textContent='选择「另存为 PDF」，建议关闭页眉页脚。保存后可关闭此页。';
+  status.textContent='请选择浏览器「存为 PDF / Save as PDF」，不要选「Microsoft Print to PDF」。关闭页眉页脚，保存完成后再关闭此页。';
   window.opener=null;
   print();
 }

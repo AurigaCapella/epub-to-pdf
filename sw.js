@@ -1,4 +1,4 @@
-const CACHE = 'paperbridge-v4';
+const CACHE = 'paperbridge-v5';
 const ROOT = new URL('./', self.location).href;
 const SHELL = ['./','./index.html','./styles.css','./app.js','./print.html','./print.js','./print.css','./epub.js','./unzip-worker.js','./vendor/fflate.js','./vendor/purify.min.js','./icon.svg','./manifest.webmanifest','./README.md'];
 self.addEventListener('install', event => {
