@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f3ee"><meta name="description" content="纸桥 Paperbridge：本地、离线、无需安装的 EPUB 转 PDF 工具。文件无需上传。">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' about:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>纸桥 Paperbridge · EPUB 转 PDF</title>
+<link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css">
+<script defer src="./vendor/fflate.js"></script><script defer src="./vendor/purify.min.js"></script><script type="module" src="./app.js"></script>
+</head>
+<body>
+<header class="site-header"><a class="brand" href="./" aria-label="纸桥首页"><span class="brand-symbol">纸</span><span>纸桥 <small>PAPERBRIDGE</small></span></a><div class="header-right"><span id="offline-state" class="badge" role="status">正在准备离线使用</span><a href="https://github.com/AurigaCapella/epub-to-pdf" target="_blank" rel="noopener">GitHub ↗</a></div></header>
+<main>
+<section class="intro"><div><p class="eyebrow">EPUB → PDF / ALL ON YOUR DEVICE</p><h1>把电子书，变成一页页好读的纸。</h1><p class="intro-copy">拖入一本 EPUB，调整版面，带走你的 PDF。<br>无需安装，文件始终留在你的设备上。</p></div><div class="intro-note"><span class="note-line"></span><span>一本书，另一种读法。<br><small>LOCAL. QUIET. YOURS.</small></span></div></section>
+<section class="workspace" aria-label="EPUB 转换工作台">
+<aside class="sidebar">
+<div class="step-heading"><span>01</span><h2>选择书籍</h2></div>
+<div id="drop-zone" class="drop-zone"><div class="upload-icon" aria-hidden="true">↥</div><strong>把 EPUB 拖到这里</strong><span>或从你的设备选择文件</span><button id="pick-file" class="button secondary">选择 EPUB</button><input id="file-input" type="file" accept=".epub,application/epub+zip" hidden><small>单本 ≤ 100 MB · 不支持 DRM 加密书籍</small></div>
+<div id="book-info" class="book-info" hidden><span class="book-icon">▤</span><div><strong id="book-title"></strong><span id="book-author"></span><small id="book-meta"></small></div><button id="clear-book" class="icon-button" aria-label="移除当前书籍" title="移除书籍">×</button></div>
+<p id="status" class="status" role="status" aria-live="polite">所有处理均在浏览器中完成。</p><progress id="progress" max="100" value="0" hidden aria-label="转换进度"></progress>
+<div class="settings"><div class="step-heading"><span>02</span><h2>调整版面</h2><button id="reset-settings" class="text-button">重置</button></div>
+<div class="setting-grid"><label>纸张<select id="paper"><option value="A4">A4 · 210 × 297 mm</option><option value="A5">A5 · 148 × 210 mm</option><option value="Letter">Letter · 8.5 × 11 in</option></select></label><label>页边距<select id="margin"><option value="15">紧凑 · 15 mm</option><option value="20" selected>舒适 · 20 mm</option><option value="25">宽松 · 25 mm</option></select></label><label>字体<select id="font"><option value="serif">宋体 / 衬线</option><option value="sans">黑体 / 无衬线</option></select></label><label>行距<select id="line-height"><option value="1.5">1.5 倍</option><option value="1.8" selected>1.8 倍</option><option value="2">2 倍</option></select></label></div>
+<label class="range-label" for="font-size">正文字号 <output id="size-output">12 pt</output></label><input id="font-size" type="range" min="9" max="20" step="1" value="12">
+<label class="check"><input id="chapter-break" type="checkbox" checked>每章另起一页</label>
+</div>
+<details id="chapter-panel" hidden><summary>导出章节 <span id="chapter-count"></span></summary><div class="chapter-actions"><button id="select-all" class="text-button">全选</button><button id="select-none" class="text-button">全不选</button></div><div id="chapter-list" class="chapter-list"></div></details>
+<div class="export-area"><div class="step-heading"><span>03</span><h2>带走 PDF</h2></div><button id="export" class="button primary" disabled>另存为 PDF <span aria-hidden="true">↗</span></button><p>在打印窗口中选择「另存为 PDF」。<br>关闭页眉页脚，获得更干净的版面。</p></div>
+</aside>
+<section class="preview-area" aria-label="书籍预览"><div class="preview-toolbar"><span><i class="live-dot"></i> 排版预览</span><span id="preview-label">等待你的第一本书</span></div><div id="empty-preview" class="empty-preview"><div class="paper-stack"><div class="sample-page"><div class="sample-label">THE NEXT CHAPTER</div><div class="sample-title">让阅读<br>回到纸上。</div><div class="sample-rule"></div><p>从屏幕到纸页，<br>每一种阅读都有自己的节奏。</p><div class="sample-lines"><i></i><i></i><i></i><i></i></div><span class="sample-footer">纸桥 / PAPERBRIDGE</span></div></div><p>你的书籍，将在这里展开。</p><button id="demo" class="text-button">没有 EPUB？试试示例书籍 →</button></div><iframe id="preview" title="EPUB 书籍排版预览" sandbox="allow-same-origin allow-modals" referrerpolicy="no-referrer" hidden></iframe><div class="preview-footer"><span>文字可选择 · 图片保留 · 中文友好</span><span>预览连续排版，分页以打印窗口为准</span></div></section>
+</section>
+<section class="footnotes"><div><b>01 / 本地处理</b><p>不上传、不保存书籍，不需要账户。关闭或刷新页面后，书籍内容即从应用中清除。</p></div><div><b>02 / 断网也能用</b><p>首次联网打开，等待右上角显示「离线已就绪」，之后在同一浏览器中断网也可打开使用。</p></div><div><b>03 / 为阅读重新排版</b><p>适合可重排 EPUB。复杂原版式、交互内容、嵌入字体和音视频不保留；加密书籍无法转换。</p></div></section>
+</main><footer class="site-footer"><span>纸桥 Paperbridge</span><span>让格式少一点，让阅读多一点。</span><a href="./README.md">使用说明 ↗</a></footer>
+</body></html>
